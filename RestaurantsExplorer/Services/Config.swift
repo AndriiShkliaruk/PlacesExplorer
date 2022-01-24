@@ -20,7 +20,7 @@ struct Config {
 
     static let apiKey = "fsq3FUhRLc6rTsoOowg+MfPk5iG0h1kcv6IITzTFO2LO6uo="
     
-    static let defaultCategories = [
+    static let categories = [
         "Arts and Entertainment": "10000",
         "Business and Professional Services": "11000",
         "Community and Government": "12000",

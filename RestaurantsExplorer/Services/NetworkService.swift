@@ -12,8 +12,6 @@ class NetworkService {
     
     static func get<T: Decodable>(by urlRequest: URLRequest, completion: @escaping Completion<T>) {
         
-        //guard let request = try? urlRequest else { return }
-        
         URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             if let error = error {
                 completion(.failure(.network(error)))

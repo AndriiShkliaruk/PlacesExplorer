@@ -16,6 +16,7 @@ enum PlacesEndpoint {
             switch self {
             case .detail(let id):
                 return buildURLRequest(from: Config.EndpointPath.detail, with: ["fsq_id": id])
+                
             case .search(let location, let limit, let query, let category):
                 var parameters = ["ll": location, "limit": limit]
                 if let query = query { parameters["query"] = query }
@@ -25,7 +26,7 @@ enum PlacesEndpoint {
         }
     }
     
-    private func buildURLRequest(from path: String, with parameters: [String: String] = [:]) -> URLRequest {
+    private func buildURLRequest(from path: String, with parameters: [String: String]) -> URLRequest {
         var components = URLComponents()
         components.scheme = "https"
         components.host = Config.hostURL
