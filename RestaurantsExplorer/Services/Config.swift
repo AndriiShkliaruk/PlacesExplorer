@@ -15,7 +15,7 @@ struct Config {
         static let detail = "/v3/places"
     }
 
-    static let placesLimit = String(20)
+    static let placesLimit = String(30)
     static var location = "49.8433497,24.0937968"
 
     static let apiKey = "fsq3FUhRLc6rTsoOowg+MfPk5iG0h1kcv6IITzTFO2LO6uo="

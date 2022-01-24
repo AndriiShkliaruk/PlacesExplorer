@@ -41,7 +41,7 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
         setupNoResultsLabel()
         setupSpinner()
         
-        getPlaces(by: PlacesEndpoint.search(location: Config.location, limit: Config.placesLimit, query: "", category: "12000"))
+        getPlaces(by: PlacesEndpoint.search(location: Config.location, limit: Config.placesLimit, query: "", category: placesCategory))
         
         
     }
@@ -70,13 +70,14 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
     private func setupNoResultsLabel() {
         tableView.addSubview(noResultsLabel)
         noResultsLabel.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        noResultsLabel.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 50).isActive = true
+        noResultsLabel.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 150).isActive = true
     }
     
     private func setupSpinner() {
         tableView.addSubview(spinner)
         spinner.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
-        spinner.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
+        spinner.centerYAnchor.constraint(equalTo: tableView.centerYAnchor,constant: -((navigationController?.navigationBar.frame.height)! + (navigationItem.searchController?.searchBar.frame.height)!)).isActive = true
+        spinner.startAnimating()
     }
     
     
@@ -84,6 +85,12 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
     // MARK: - UITableView Delegate and DataSource methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if places.count == 0 {
+            noResultsLabel.text = "No results found..."
+            noResultsLabel.isHidden = false
+        } else {
+            noResultsLabel.isHidden = true
+        }
         return places.count
     }
     
