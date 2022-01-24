@@ -100,8 +100,14 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let placeDetailViewController = PlaceDetailViewController()
+        placeDetailViewController.place = places[indexPath.row]
+        navigationController?.pushViewController(placeDetailViewController, animated: true)
+    }
     
-    // MARK: - UISearchBarDelegate method
+    
+    // MARK: - UISearchBarDelegate methods
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         spinner.startAnimating()
@@ -111,12 +117,14 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
         })
     }
     
+    //MARK: - User interaction methods
+    
     @objc func filterBarButtonTapped(_ sender:UIButton!) {
         print("filter")
     }
     
     
-    // MARK: - NetworkService method
+    // MARK: - NetworkService methods
     
     private func getPlaces(by endpoint: PlacesEndpoint) {
         NetworkService.get(by: endpoint.asURLRequest) { (result: Swift.Result<PlacesResponse, DataError>) in

@@ -19,6 +19,7 @@
 		F99BF318279DED5A00F843E6 /* PlacesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99BF317279DED5A00F843E6 /* PlacesListViewController.swift */; };
 		F99BF31A279ECF6900F843E6 /* PlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99BF319279ECF6900F843E6 /* PlaceCell.swift */; };
 		F99BF31C279EDFB700F843E6 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99BF31B279EDFB700F843E6 /* UIViewExtension.swift */; };
+		F99BF322279F1AE300F843E6 /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99BF321279F1AE300F843E6 /* PlaceDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		F99BF317279DED5A00F843E6 /* PlacesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesListViewController.swift; sourceTree = "<group>"; };
 		F99BF319279ECF6900F843E6 /* PlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCell.swift; sourceTree = "<group>"; };
 		F99BF31B279EDFB700F843E6 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		F99BF321279F1AE300F843E6 /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				F99BF317279DED5A00F843E6 /* PlacesListViewController.swift */,
+				F99BF321279F1AE300F843E6 /* PlaceDetailViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -241,6 +244,7 @@
 				F99BF318279DED5A00F843E6 /* PlacesListViewController.swift in Sources */,
 				F9686BFE2797DB2D00B68824 /* AppDelegate.swift in Sources */,
 				F99BF311279C7CEB00F843E6 /* NetworkService.swift in Sources */,
+				F99BF322279F1AE300F843E6 /* PlaceDetailViewController.swift in Sources */,
 				F9686C002797DB2D00B68824 /* SceneDelegate.swift in Sources */,
 				F99BF31A279ECF6900F843E6 /* PlaceCell.swift in Sources */,
 			);
