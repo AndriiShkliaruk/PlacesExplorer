@@ -7,11 +7,13 @@
 
 import UIKit
 
-class PlacesListViewController: UITableViewController, UISearchBarDelegate {
+class PlacesListViewController: UITableViewController, UISearchBarDelegate, FilterCategoriesDelegate {
     
     private var places = [Place]()
+    private var categories: [FilterCategory]?
     private var timer: Timer?
-    private var placesCategory = ""
+    private var searchText = ""
+    
     
     private let noResultsLabel: UILabel = {
         let label = UILabel()
@@ -41,10 +43,11 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
         setupNoResultsLabel()
         setupSpinner()
         
-        getPlaces(by: PlacesEndpoint.search(location: Config.location, limit: Config.placesLimit, query: "", category: placesCategory))
-        
-        
+        loadCategories()
+        getPlaces()
     }
+    
+    
     
     //MARK: - Setup UI Elements
     
@@ -77,12 +80,12 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
         tableView.addSubview(spinner)
         spinner.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
         spinner.centerYAnchor.constraint(equalTo: tableView.centerYAnchor,constant: -((navigationController?.navigationBar.frame.height)! + (navigationItem.searchController?.searchBar.frame.height)!)).isActive = true
-        spinner.startAnimating()
+        //spinner.startAnimating()
     }
     
     
     
-    // MARK: - UITableView Delegate and DataSource methods
+    // MARK: - TableView methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if places.count == 0 {
@@ -110,34 +113,60 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
     // MARK: - UISearchBarDelegate methods
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        spinner.startAnimating()
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false, block: { (_) in
-            self.getPlaces(by: PlacesEndpoint.search(location: Config.location, limit: Config.placesLimit, query: searchText, category: self.placesCategory))
+            self.searchText = searchText
+            self.getPlaces()
         })
     }
+    
+    
+    // MARK: - FilterCategoriesDelegate methods
+    
+    func set(categories: [FilterCategory]?) {
+        self.categories = categories
+        getPlaces()
+    }
+    
     
     //MARK: - User interaction methods
     
     @objc func filterBarButtonTapped(_ sender:UIButton!) {
-        print("filter")
+        let filterCategoriesViewController = FilterCategoriesViewController()
+        filterCategoriesViewController.delegate = self
+        filterCategoriesViewController.categories = categories
+        let navigationController = UINavigationController(rootViewController: filterCategoriesViewController)
+        present(navigationController, animated: true)
     }
+    
     
     
     // MARK: - NetworkService methods
     
-    private func getPlaces(by endpoint: PlacesEndpoint) {
+    private func getPlaces() {
+        spinner.startAnimating()
+        let selectedCategoriesCodes = categories?.filter { $0.selected }.map { $0.code }.joined(separator: ",")
+
+        let endpoint = PlacesEndpoint.search(location: Config.location, limit: Config.placesLimit, query: searchText, categories: selectedCategoriesCodes)
         NetworkService.get(by: endpoint.asURLRequest) { (result: Swift.Result<PlacesResponse, DataError>) in
-            switch result {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .success(let results):
-                self.places = results.places
-                DispatchQueue.main.async {
-                    self.spinner.stopAnimating()
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error.localizedDescription)
+                case .success(let results):
+                    self.places = results.places
                     self.tableView.reloadData()
                 }
+                self.spinner.stopAnimating()
             }
+        }
+    }
+    
+    
+    
+    private func loadCategories() {
+        categories = Config.categories.map {
+                FilterCategory(name: $0.key, code: $0.value, selected: false)
         }
     }
     

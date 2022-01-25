@@ -8,19 +8,20 @@
 import Foundation
 
 enum PlacesEndpoint {
-    case search(location: String, limit: String, query: String?, category: String?)
+    case search(location: String, limit: String, query: String?, categories: String?)
     case detail(id: String)
     
     var asURLRequest: URLRequest {
         get {
             switch self {
             case .detail(let id):
-                return buildURLRequest(from: Config.EndpointPath.detail, with: ["fsq_id": id])
+                let parameters = ["fsq_id": id, "fields": "fsq_id,name,location,categories,description,rating,photos"]
+                return buildURLRequest(from: Config.EndpointPath.detail, with: parameters)
                 
-            case .search(let location, let limit, let query, let category):
+            case .search(let location, let limit, let query, let categories):
                 var parameters = ["ll": location, "limit": limit]
                 if let query = query { parameters["query"] = query }
-                if let category = category { parameters["categories"] = category }
+                if let selectedCategories = categories { parameters["categories"] = selectedCategories }
                 return buildURLRequest(from: Config.EndpointPath.search, with: parameters)
             }
         }

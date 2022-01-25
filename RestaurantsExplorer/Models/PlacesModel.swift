@@ -20,10 +20,13 @@ struct Place: Decodable {
     let name: String
     let location: Location
     let categories: [Category]
+    let description: String?
+    let rating: Double?
+    let photos: [PlacePhoto]?
     
     private enum CodingKeys: String, CodingKey {
         case id = "fsq_id"
-        case name, location, categories
+        case name, location, categories, description, rating, photos
     }
     
     struct Category: Decodable {
@@ -34,5 +37,10 @@ struct Place: Decodable {
         let address: String?
         let locality: String?
         let country: String
+    }
+    
+    struct PlacePhoto: Decodable {
+        let prefix: String
+        let suffix: String
     }
 }
