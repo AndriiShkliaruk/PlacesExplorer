@@ -15,8 +15,8 @@ enum PlacesEndpoint {
         get {
             switch self {
             case .detail(let id):
-                let parameters = ["fsq_id": id, "fields": "fsq_id,name,location,categories,description,rating,photos"]
-                return buildURLRequest(from: Config.EndpointPath.detail, with: parameters)
+                let parameters = ["fields": "fsq_id,name,location,categories,description,rating,photos"]
+                return buildURLRequest(from: "\(Config.EndpointPath.detail + id)", with: parameters)
                 
             case .search(let location, let limit, let query, let categories):
                 var parameters = ["ll": location, "limit": limit]

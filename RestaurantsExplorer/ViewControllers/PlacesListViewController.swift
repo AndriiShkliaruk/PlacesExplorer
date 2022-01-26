@@ -80,7 +80,6 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate, Filt
         tableView.addSubview(spinner)
         spinner.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
         spinner.centerYAnchor.constraint(equalTo: tableView.centerYAnchor,constant: -((navigationController?.navigationBar.frame.height)! + (navigationItem.searchController?.searchBar.frame.height)!)).isActive = true
-        //spinner.startAnimating()
     }
     
     
@@ -106,7 +105,7 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate, Filt
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let placeDetailViewController = PlaceDetailViewController()
         placeDetailViewController.place = places[indexPath.row]
-        navigationController?.pushViewController(placeDetailViewController, animated: true)
+        navigationController?.show(placeDetailViewController, sender: self)
     }
     
     

@@ -13,26 +13,26 @@ class PlaceCell: UITableViewCell {
     var place: Place? {
         didSet {
             if let receivedPlace = place {
-                placeNameLabel.text = "Name: \(receivedPlace.name)"
-                placeAddressLabel.text = "Address: \(receivedPlace.location.address ?? "No address")"
-                placeCategoryLabel.text = "Category: \(receivedPlace.categories[0].name)"
+                nameLabel.text = "Name: \(receivedPlace.name)"
+                addressLabel.text = "Address: \(receivedPlace.location.address ?? "No address")"
+                categoryLabel.text = "Category: \(receivedPlace.categories[0].name)"
             }
         }
     }
 
-    let placeNameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         return label
     }()
     
-    let placeAddressLabel: UILabel = {
+    private let addressLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         return label
     }()
     
-    let placeCategoryLabel: UILabel = {
+    private let categoryLabel: UILabel = {
         let label = UILabel()
         return label
     }()
@@ -40,7 +40,7 @@ class PlaceCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        let stackView = UIStackView(arrangedSubviews: [placeNameLabel, placeAddressLabel, placeCategoryLabel])
+        let stackView = UIStackView(arrangedSubviews: [nameLabel, addressLabel, categoryLabel])
         stackView.distribution = .equalSpacing
         stackView.axis = .vertical
         stackView.spacing = 2

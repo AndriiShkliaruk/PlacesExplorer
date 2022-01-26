@@ -164,6 +164,7 @@
 				F9686BF62797DB2D00B68824 /* Sources */,
 				F9686BF72797DB2D00B68824 /* Frameworks */,
 				F9686BF82797DB2D00B68824 /* Resources */,
+				7176F6FD54202821F4171738 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -220,6 +221,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		7176F6FD54202821F4171738 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RestaurantsExplorer/Pods-RestaurantsExplorer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RestaurantsExplorer/Pods-RestaurantsExplorer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RestaurantsExplorer/Pods-RestaurantsExplorer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		7B26752FCAC9C5FBBEBF532A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

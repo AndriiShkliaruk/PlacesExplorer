@@ -12,7 +12,7 @@ struct Config {
     
     struct EndpointPath {
         static let search = "/v3/places/search"
-        static let detail = "/v3/places"
+        static let detail = "/v3/places/"
     }
 
     static let placesLimit = String(30)
@@ -42,4 +42,5 @@ struct Config {
     enum ContentType: String {
         case json = "application/json"
     }
+    
 }
