@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FilterCategory {
+struct FilterCategory: Equatable {
     let name: String
     let code: String
     var selected: Bool

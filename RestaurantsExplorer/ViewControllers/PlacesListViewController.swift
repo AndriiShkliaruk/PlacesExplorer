@@ -6,13 +6,16 @@
 //
 
 import UIKit
+import CoreLocation
 
-class PlacesListViewController: UITableViewController, UISearchBarDelegate, FilterCategoriesDelegate {
+class PlacesListViewController: UITableViewController, UISearchBarDelegate {
     
+    private let locationManager = CLLocationManager()
     private var places = [Place]()
     private var categories: [FilterCategory]?
-    private var timer: Timer?
+    private var searchBarTimer: Timer?
     private var searchText = ""
+    private var location = Config.defaultLocation
     
     
     private let noResultsLabel: UILabel = {
@@ -42,9 +45,10 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate, Filt
         setupSearchBar()
         setupNoResultsLabel()
         setupSpinner()
+        setupRefreshControl()
         
+        setupLocationManager()
         loadCategories()
-        getPlaces()
     }
     
     
@@ -82,6 +86,11 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate, Filt
         spinner.centerYAnchor.constraint(equalTo: tableView.centerYAnchor,constant: -((navigationController?.navigationBar.frame.height)! + (navigationItem.searchController?.searchBar.frame.height)!)).isActive = true
     }
     
+    private func setupRefreshControl() {
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(callPullToRefresh), for: .valueChanged)
+    }
+    
     
     
     // MARK: - TableView methods
@@ -109,33 +118,36 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate, Filt
     }
     
     
+    
     // MARK: - UISearchBarDelegate methods
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false, block: { (_) in
+        searchBarTimer?.invalidate()
+        searchBarTimer = Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false, block: { (_) in
             self.searchText = searchText
             self.getPlaces()
         })
     }
-    
-    
-    // MARK: - FilterCategoriesDelegate methods
-    
-    func set(categories: [FilterCategory]?) {
-        self.categories = categories
-        getPlaces()
-    }
+
     
     
     //MARK: - User interaction methods
     
-    @objc func filterBarButtonTapped(_ sender:UIButton!) {
+    @objc private func filterBarButtonTapped(_ sender:UIButton!) {
         let filterCategoriesViewController = FilterCategoriesViewController()
         filterCategoriesViewController.delegate = self
         filterCategoriesViewController.categories = categories
         let navigationController = UINavigationController(rootViewController: filterCategoriesViewController)
         present(navigationController, animated: true)
+    }
+    
+    
+    @objc private func callPullToRefresh() {
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.requestLocation()
+            print("requestLocation")
+        }
+        refreshControl?.endRefreshing()
     }
     
     
@@ -146,7 +158,7 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate, Filt
         spinner.startAnimating()
         let selectedCategoriesCodes = categories?.filter { $0.selected }.map { $0.code }.joined(separator: ",")
 
-        let endpoint = PlacesEndpoint.search(location: Config.location, limit: Config.placesLimit, query: searchText, categories: selectedCategoriesCodes)
+        let endpoint = PlacesEndpoint.search(location: location, limit: Config.placesLimit, query: searchText, categories: selectedCategoriesCodes)
         NetworkService.get(by: endpoint.asURLRequest) { (result: Swift.Result<PlacesResponse, DataError>) in
             DispatchQueue.main.async {
                 switch result {
@@ -155,6 +167,7 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate, Filt
                 case .success(let results):
                     self.places = results.places
                     self.tableView.reloadData()
+                    print("get")
                 }
                 self.spinner.stopAnimating()
             }
@@ -169,5 +182,46 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate, Filt
         }
     }
     
+}
 
+
+
+// MARK: - FilterCategoriesDelegate implementation
+
+extension PlacesListViewController: FilterCategoriesDelegate {
+    func set(categories: [FilterCategory]?) {
+        guard self.categories != categories else { return }
+        self.categories = categories
+        getPlaces()
+        
+    }
+}
+
+
+
+// MARK: - CoreLocation methods
+
+extension PlacesListViewController: CLLocationManagerDelegate {
+    private func setupLocationManager() {
+        locationManager.requestWhenInUseAuthorization()
+        guard CLLocationManager.locationServicesEnabled() else { return }
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestLocation()
+        
+    }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        guard let locValue = locations.first?.coordinate else { return }
+        let locationString = "\(locValue.latitude),\(locValue.longitude)"
+        guard locationString != location else { return }
+        location = locationString
+        getPlaces()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Failed to find user's location: \(error.localizedDescription)")
+    }
 }

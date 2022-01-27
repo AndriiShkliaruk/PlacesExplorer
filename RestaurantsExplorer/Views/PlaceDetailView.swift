@@ -15,30 +15,7 @@ class PlaceDetailView: UIView {
     var place: Place? {
         didSet {
             if let receivedPlace = place {
-                if let photos = place?.photos {
-//                    imageSlideshow.setImageInputs([AlamofireSource(urlString: "\(photos[0].prefix)original\(photos[0].suffix)", placeholder: nil)!])
-                    imageSlideshow.setImageInputs(
-                        photos.map { photo in
-                            AlamofireSource(urlString: "\(photo.prefix)800x800\(photo.suffix)", placeholder: nil)!
-                        }
-                    )
-                    
-                    print("\(photos[0].prefix)800x800\(photos[0].suffix)")
-                }
-                
-                
-                
-                nameLabel.text = "Name: \(receivedPlace.name)"
-                descriptionLabel.text = "Description: \(receivedPlace.description ?? noDataInfo)"
-                addressLabel.text = "Address: \(receivedPlace.location.address ?? noDataInfo)"
-                localityLabel.text = "Locality: \(receivedPlace.location.locality ?? noDataInfo)"
-                categoriesLabel.text = "Categories: \(receivedPlace.categories.map { $0.name }.joined(separator: ", "))"
-                
-                if let rating = receivedPlace.rating {
-                    ratingLabel.text = "Rating: \(rating)"
-                } else {
-                    ratingLabel.text = "Rating: \(noDataInfo)"
-                }
+                configureUIElements(with: receivedPlace)
             }
         }
     }
@@ -48,7 +25,12 @@ class PlaceDetailView: UIView {
         let slideshow = ImageSlideshow()
         slideshow.pageIndicatorPosition = .init(horizontal: .center, vertical: .under)
         slideshow.contentScaleMode = .scaleAspectFill
-
+        slideshow.activityIndicator = DefaultActivityIndicator()
+        slideshow.activityIndicator = DefaultActivityIndicator(style: .large, color: .gray)
+        let pageIndicator = UIPageControl()
+        pageIndicator.currentPageIndicatorTintColor = UIColor.black
+        pageIndicator.pageIndicatorTintColor = UIColor.lightGray
+        slideshow.pageIndicator = pageIndicator
         return slideshow
     }()
     
@@ -65,35 +47,46 @@ class PlaceDetailView: UIView {
     }()
     
     private let addressLabel = UILabel()
-    
     private let localityLabel = UILabel()
-    
     private let categoriesLabel = UILabel()
-    
     private let ratingLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         backgroundColor = .white
-        
         addSubview(imageSlideshow)
         
         let labels = [nameLabel, descriptionLabel, addressLabel, localityLabel, categoriesLabel, ratingLabel]
         let stackView = UIStackView(arrangedSubviews: labels)
         stackView.distribution = .equalSpacing
         stackView.axis = .vertical
-        stackView.spacing = 2
+        stackView.spacing = 10
         addSubview(stackView)
         
-        
-        
-        imageSlideshow.anchor(top: topAnchor, left: leftAnchor, bottom: stackView.topAnchor, right: rightAnchor, paddingTop: 100, paddingLeft: 0, paddingBottom: 50, paddingRight: 0, width: frame.width, height: frame.width, enableInsets: false)
-        stackView.anchor(top: imageSlideshow.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 15, paddingBottom: 50, paddingRight: 15, width: 0, height: 0, enableInsets: false)
+        imageSlideshow.anchor(top: topAnchor, left: leftAnchor, bottom: stackView.topAnchor, right: rightAnchor, paddingTop: 100, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: frame.width, height: frame.width, enableInsets: false)
+        stackView.anchor(top: imageSlideshow.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 10, paddingLeft: 15, paddingBottom: 50, paddingRight: 15, width: 0, height: 0, enableInsets: false)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    private func configureUIElements(with place: Place) {
+        if let photos = place.photos {
+            imageSlideshow.setImageInputs(
+                photos.map { photo in
+                    AlamofireSource(urlString: "\(photo.prefix)800x800\(photo.suffix)", placeholder: nil)!
+                })
+        }
+        
+        nameLabel.text = "Name: \(place.name)"
+        descriptionLabel.text = "Description: \(place.description ?? noDataInfo)"
+        addressLabel.text = "Address: \(place.location.address ?? noDataInfo)"
+        localityLabel.text = "Locality: \(place.location.locality ?? noDataInfo)"
+        categoriesLabel.text = "Categories: \(place.categories.map { $0.name }.joined(separator: ", "))"
+        ratingLabel.text = "Rating: \(place.rating != nil ? String(place.rating!) : noDataInfo)"
     }
     
     
