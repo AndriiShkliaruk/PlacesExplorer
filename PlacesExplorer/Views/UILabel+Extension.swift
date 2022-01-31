@@ -1,6 +1,6 @@
 //
 //  UILabel+Extension.swift
-//  RestaurantsExplorer
+//  PlacesExplorer
 //
 //  Created by Andrii Shkliaruk on 30.01.2022.
 //

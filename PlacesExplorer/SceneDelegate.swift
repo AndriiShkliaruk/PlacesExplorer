@@ -1,6 +1,6 @@
 //
 //  SceneDelegate.swift
-//  RestaurantsExplorer
+//  PlacesExplorer
 //
 //  Created by Andrii Shkliaruk on 19.01.2022.
 //

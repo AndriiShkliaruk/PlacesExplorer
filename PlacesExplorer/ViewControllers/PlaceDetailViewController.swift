@@ -1,6 +1,6 @@
 //
 //  PlaceDetailViewController.swift
-//  RestaurantsExplorer
+//  PlacesExplorer
 //
 //  Created by Andrii Shkliaruk on 24.01.2022.
 //

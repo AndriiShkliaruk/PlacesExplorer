@@ -31,7 +31,7 @@
 		61DF6E2FAA67D494A5295A69 /* Pods-RestaurantsExplorer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RestaurantsExplorer.release.xcconfig"; path = "Target Support Files/Pods-RestaurantsExplorer/Pods-RestaurantsExplorer.release.xcconfig"; sourceTree = "<group>"; };
 		83C27496DA515AECD52070E8 /* Pods-RestaurantsExplorer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RestaurantsExplorer.debug.xcconfig"; path = "Target Support Files/Pods-RestaurantsExplorer/Pods-RestaurantsExplorer.debug.xcconfig"; sourceTree = "<group>"; };
 		A9592E0C2FC089B96EE7EDC7 /* Pods_RestaurantsExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RestaurantsExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F9686BFA2797DB2D00B68824 /* RestaurantsExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RestaurantsExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9686BFA2797DB2D00B68824 /* PlacesExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlacesExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9686BFD2797DB2D00B68824 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F9686BFF2797DB2D00B68824 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F9686C062797DB3000B68824 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 		F9686BF12797DB2D00B68824 = {
 			isa = PBXGroup;
 			children = (
-				F9686BFC2797DB2D00B68824 /* RestaurantsExplorer */,
+				F9686BFC2797DB2D00B68824 /* PlacesExplorer */,
 				F9686BFB2797DB2D00B68824 /* Products */,
 				FBF17BF092AE5D289B0AB86F /* Pods */,
 				CD58A5FDDC1DEAE72F17A49B /* Frameworks */,
@@ -85,12 +85,12 @@
 		F9686BFB2797DB2D00B68824 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F9686BFA2797DB2D00B68824 /* RestaurantsExplorer.app */,
+				F9686BFA2797DB2D00B68824 /* PlacesExplorer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F9686BFC2797DB2D00B68824 /* RestaurantsExplorer */ = {
+		F9686BFC2797DB2D00B68824 /* PlacesExplorer */ = {
 			isa = PBXGroup;
 			children = (
 				F9FA084327A59B82000672B2 /* Config */,
@@ -103,7 +103,7 @@
 				F9686C062797DB3000B68824 /* Assets.xcassets */,
 				F9686C0B2797DB3000B68824 /* Info.plist */,
 			);
-			path = RestaurantsExplorer;
+			path = PlacesExplorer;
 			sourceTree = "<group>";
 		};
 		F99BF30D279C796900F843E6 /* Services */ = {
@@ -167,9 +167,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F9686BF92797DB2D00B68824 /* RestaurantsExplorer */ = {
+		F9686BF92797DB2D00B68824 /* PlacesExplorer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F9686C0E2797DB3000B68824 /* Build configuration list for PBXNativeTarget "RestaurantsExplorer" */;
+			buildConfigurationList = F9686C0E2797DB3000B68824 /* Build configuration list for PBXNativeTarget "PlacesExplorer" */;
 			buildPhases = (
 				7B26752FCAC9C5FBBEBF532A /* [CP] Check Pods Manifest.lock */,
 				F9686BF62797DB2D00B68824 /* Sources */,
@@ -181,9 +181,9 @@
 			);
 			dependencies = (
 			);
-			name = RestaurantsExplorer;
+			name = PlacesExplorer;
 			productName = RestaurantsExplorer;
-			productReference = F9686BFA2797DB2D00B68824 /* RestaurantsExplorer.app */;
+			productReference = F9686BFA2797DB2D00B68824 /* PlacesExplorer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -201,7 +201,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F9686BF52797DB2D00B68824 /* Build configuration list for PBXProject "RestaurantsExplorer" */;
+			buildConfigurationList = F9686BF52797DB2D00B68824 /* Build configuration list for PBXProject "PlacesExplorer" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -214,7 +214,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F9686BF92797DB2D00B68824 /* RestaurantsExplorer */,
+				F9686BF92797DB2D00B68824 /* PlacesExplorer */,
 			);
 		};
 /* End PBXProject section */
@@ -436,7 +436,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6F228H4277;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RestaurantsExplorer/Info.plist;
+				INFOPLIST_FILE = PlacesExplorer/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We’ll use this to personalize your app experience";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -449,7 +449,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.devshkliaruk.RestaurantsExplorer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.devshkliaruk.PlacesExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -467,7 +467,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6F228H4277;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RestaurantsExplorer/Info.plist;
+				INFOPLIST_FILE = PlacesExplorer/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We’ll use this to personalize your app experience";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -480,7 +480,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.devshkliaruk.RestaurantsExplorer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.devshkliaruk.PlacesExplorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -491,7 +491,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F9686BF52797DB2D00B68824 /* Build configuration list for PBXProject "RestaurantsExplorer" */ = {
+		F9686BF52797DB2D00B68824 /* Build configuration list for PBXProject "PlacesExplorer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F9686C0C2797DB3000B68824 /* Debug */,
@@ -500,7 +500,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F9686C0E2797DB3000B68824 /* Build configuration list for PBXNativeTarget "RestaurantsExplorer" */ = {
+		F9686C0E2797DB3000B68824 /* Build configuration list for PBXNativeTarget "PlacesExplorer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F9686C0F2797DB3000B68824 /* Debug */,

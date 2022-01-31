@@ -1,6 +1,6 @@
 //
 //  PlacesEndpoint.swift
-//  RestaurantsExplorer
+//  PlacesExplorer
 //
 //  Created by Andrii Shkliaruk on 22.01.2022.
 //
