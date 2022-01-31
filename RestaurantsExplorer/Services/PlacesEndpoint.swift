@@ -16,13 +16,13 @@ enum PlacesEndpoint {
             switch self {
             case .detail(let id):
                 let parameters = ["fields": "fsq_id,name,location,categories,description,rating,photos"]
-                return buildURLRequest(from: "\(Config.EndpointPath.detail + id)", with: parameters)
+                return buildURLRequest(from: "\(Constants.EndpointPath.detail + id)", with: parameters)
                 
             case .search(let location, let limit, let query, let categories):
                 var parameters = ["ll": location, "limit": limit]
                 if let query = query { parameters["query"] = query }
                 if let selectedCategories = categories { parameters["categories"] = selectedCategories }
-                return buildURLRequest(from: Config.EndpointPath.search, with: parameters)
+                return buildURLRequest(from: Constants.EndpointPath.search, with: parameters)
             }
         }
     }
@@ -30,7 +30,7 @@ enum PlacesEndpoint {
     private func buildURLRequest(from path: String, with parameters: [String: String]) -> URLRequest {
         var components = URLComponents()
         components.scheme = "https"
-        components.host = Config.hostURL
+        components.host = Constants.hostURL
         components.path = path
         
         components.queryItems = parameters.map { URLQueryItem(name: $0, value: $1)}
@@ -39,8 +39,8 @@ enum PlacesEndpoint {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.setValue(Config.ContentType.json.rawValue, forHTTPHeaderField: Config.HTTPHeaderField.contentType.rawValue)
-        urlRequest.setValue(Config.apiKey, forHTTPHeaderField: Config.HTTPHeaderField.authentication.rawValue)
+        urlRequest.setValue(Constants.ContentType.json.rawValue, forHTTPHeaderField: Constants.HTTPHeaderField.contentType.rawValue)
+        urlRequest.setValue(Constants.apiKey, forHTTPHeaderField: Constants.HTTPHeaderField.authentication.rawValue)
 
         return urlRequest
     }

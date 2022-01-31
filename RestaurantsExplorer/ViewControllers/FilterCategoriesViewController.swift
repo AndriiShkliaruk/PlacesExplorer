@@ -15,7 +15,7 @@ class FilterCategoriesViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "categoryCell")
+        setupTableView()
         setupNavigationBar()
     }
     
@@ -26,6 +26,10 @@ class FilterCategoriesViewController: UITableViewController {
     
     
     //MARK: - Setup UI Elements
+    
+    private func setupTableView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "categoryCell")
+    }
     
     private func setupNavigationBar() {
         navigationItem.title = "Select categories"
@@ -46,15 +50,13 @@ class FilterCategoriesViewController: UITableViewController {
             content.text = category.name
             cell.contentConfiguration = content
             cell.accessoryType = category.selected ? .checkmark : .none
+            cell.tintColor = .black
         }
-        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let category = categories?[indexPath.row] {
-            categories?[indexPath.row].selected = !category.selected
-        }
+        categories?[indexPath.row].selected.toggle()
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }

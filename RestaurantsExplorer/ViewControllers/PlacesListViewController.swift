@@ -15,26 +15,27 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
     private var categories: [FilterCategory]?
     private var searchBarTimer: Timer?
     private var searchText = ""
-    private var location = Config.defaultLocation
+    private var location = ""
     
     
-    private let noResultsLabel: UILabel = {
+    private lazy var noResultsLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .gray
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
         return label
     }()
     
-    private let spinner: UIActivityIndicatorView = {
+    private lazy var spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
         spinner.translatesAutoresizingMaskIntoConstraints = false
         return spinner
     }()
     
     private lazy var filterBarButtonItem: UIBarButtonItem = {
-        let gearIcon = UIImage(systemName: "text.justifyright")
-        return UIBarButtonItem(image: gearIcon, style: .plain, target: self, action: #selector(filterBarButtonTapped))
+        let filterIcon = UIImage(systemName: "text.justifyright")
+        return UIBarButtonItem(image: filterIcon, style: .plain, target: self, action: #selector(filterBarButtonTapped))
     }()
     
     override func viewDidLoad() {
@@ -47,17 +48,20 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
         setupSpinner()
         setupRefreshControl()
         
+        spinner.startAnimating()
+        
         setupLocationManager()
         loadCategories()
     }
     
     
-    
     //MARK: - Setup UI Elements
     
     private func setupNavigationBar() {
-        navigationItem.title = "Search places"
+        navigationItem.title = "Places Explorer"
         navigationItem.rightBarButtonItem = filterBarButtonItem
+        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.tintColor = .black
     }
     
@@ -93,15 +97,10 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
     
     
     
-    // MARK: - TableView methods
+    //MARK: - TableView methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if places.count == 0 {
-            noResultsLabel.text = "No results found..."
-            noResultsLabel.isHidden = false
-        } else {
-            noResultsLabel.isHidden = true
-        }
+        noResultsLabel.isHidden = (places.count != 0)
         return places.count
     }
     
@@ -113,13 +112,13 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let placeDetailViewController = PlaceDetailViewController()
-        placeDetailViewController.place = places[indexPath.row]
+        placeDetailViewController.placeId = places[indexPath.row].id
         navigationController?.show(placeDetailViewController, sender: self)
     }
     
     
     
-    // MARK: - UISearchBarDelegate methods
+    //MARK: - UISearchBarDelegate methods
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBarTimer?.invalidate()
@@ -145,39 +144,42 @@ class PlacesListViewController: UITableViewController, UISearchBarDelegate {
     @objc private func callPullToRefresh() {
         if CLLocationManager.locationServicesEnabled() {
             locationManager.requestLocation()
-            print("requestLocation")
         }
         refreshControl?.endRefreshing()
     }
     
     
     
-    // MARK: - NetworkService methods
+    //MARK: - NetworkService methods
     
     private func getPlaces() {
         spinner.startAnimating()
         let selectedCategoriesCodes = categories?.filter { $0.selected }.map { $0.code }.joined(separator: ",")
 
-        let endpoint = PlacesEndpoint.search(location: location, limit: Config.placesLimit, query: searchText, categories: selectedCategoriesCodes)
+        let endpoint = PlacesEndpoint.search(location: location, limit: Constants.placesLimit, query: searchText, categories: selectedCategoriesCodes)
         NetworkService.get(by: endpoint.asURLRequest) { (result: Swift.Result<PlacesResponse, DataError>) in
-            DispatchQueue.main.async {
+            
                 switch result {
                 case .failure(let error):
                     print(error.localizedDescription)
                 case .success(let results):
+                    DispatchQueue.main.async {
+                    if results.places.count == 0 {
+                        self.noResultsLabel.text = "No results found..."
+                    }
                     self.places = results.places
-                    self.tableView.reloadData()
-                    print("get")
+                        self.tableView.reloadData()
+                        self.spinner.stopAnimating()
+                    }
                 }
-                self.spinner.stopAnimating()
-            }
         }
     }
     
     
+    //MARK: - Load default categories
     
     private func loadCategories() {
-        categories = Config.categories.map {
+        categories = Constants.categories.map {
                 FilterCategory(name: $0.key, code: $0.value, selected: false)
         }
     }
@@ -193,7 +195,6 @@ extension PlacesListViewController: FilterCategoriesDelegate {
         guard self.categories != categories else { return }
         self.categories = categories
         getPlaces()
-        
     }
 }
 
@@ -208,15 +209,12 @@ extension PlacesListViewController: CLLocationManagerDelegate {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestLocation()
-        
     }
     
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
         guard let locValue = locations.first?.coordinate else { return }
         let locationString = "\(locValue.latitude),\(locValue.longitude)"
-        guard locationString != location else { return }
         location = locationString
         getPlaces()
     }

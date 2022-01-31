@@ -10,22 +10,20 @@ import ImageSlideshow
 
 class PlaceDetailView: UIView {
     
-    private let noDataInfo = "No data"
-    
     var place: Place? {
         didSet {
             if let receivedPlace = place {
-                configureUIElements(with: receivedPlace)
+                setContentToUIElements(from: receivedPlace)
             }
         }
     }
     
+    private let scrollView = UIScrollView()
     
     private let imageSlideshow: ImageSlideshow = {
         let slideshow = ImageSlideshow()
         slideshow.pageIndicatorPosition = .init(horizontal: .center, vertical: .under)
         slideshow.contentScaleMode = .scaleAspectFill
-        slideshow.activityIndicator = DefaultActivityIndicator()
         slideshow.activityIndicator = DefaultActivityIndicator(style: .large, color: .gray)
         let pageIndicator = UIPageControl()
         pageIndicator.currentPageIndicatorTintColor = UIColor.black
@@ -37,6 +35,7 @@ class PlaceDetailView: UIView {
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 24, weight: .bold)
         return label
     }()
     
@@ -50,22 +49,14 @@ class PlaceDetailView: UIView {
     private let localityLabel = UILabel()
     private let categoriesLabel = UILabel()
     private let ratingLabel = UILabel()
+    private var stackView = UIStackView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         backgroundColor = .white
-        addSubview(imageSlideshow)
-        
-        let labels = [nameLabel, descriptionLabel, addressLabel, localityLabel, categoriesLabel, ratingLabel]
-        let stackView = UIStackView(arrangedSubviews: labels)
-        stackView.distribution = .equalSpacing
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        addSubview(stackView)
-        
-        imageSlideshow.anchor(top: topAnchor, left: leftAnchor, bottom: stackView.topAnchor, right: rightAnchor, paddingTop: 100, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: frame.width, height: frame.width, enableInsets: false)
-        stackView.anchor(top: imageSlideshow.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 10, paddingLeft: 15, paddingBottom: 50, paddingRight: 15, width: 0, height: 0, enableInsets: false)
+        setupStackView()
+        setupUIElements()
     }
     
     required init?(coder: NSCoder) {
@@ -73,21 +64,49 @@ class PlaceDetailView: UIView {
     }
     
     
-    private func configureUIElements(with place: Place) {
-        if let photos = place.photos {
+    //MARK: - Setup UI Elements
+    
+    private func setupStackView() {
+        let labels = [imageSlideshow, nameLabel, descriptionLabel, addressLabel, localityLabel, categoriesLabel, ratingLabel]
+        stackView = UIStackView(arrangedSubviews: labels)
+        stackView.distribution = .equalSpacing
+        stackView.axis = .vertical
+        stackView.spacing = 10
+    }
+    
+    private func setupUIElements() {
+        addSubview(scrollView)
+        scrollView.addSubview(imageSlideshow)
+        scrollView.addSubview(stackView)
+        
+        scrollView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0, enableInsets: false)
+        imageSlideshow.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, bottom: stackView.topAnchor, right: scrollView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 10, paddingRight: 0, width: frame.width, height: frame.width, enableInsets: false)
+        stackView.anchor(top: imageSlideshow.bottomAnchor, left: leftAnchor, bottom: scrollView.bottomAnchor, right: rightAnchor, paddingTop: 10, paddingLeft: 20, paddingBottom: 0, paddingRight: 20, width: 0, height: 0, enableInsets: false)
+    }
+    
+    
+    //MARK: - Set content to UI Elements
+    
+    private func setContentToUIElements(from place: Place) {
+        if let photos = place.photos, !photos.isEmpty {
             imageSlideshow.setImageInputs(
                 photos.map { photo in
                     AlamofireSource(urlString: "\(photo.prefix)800x800\(photo.suffix)", placeholder: nil)!
                 })
+        } else {
+            let image = UIImage(named: "no-image")
+            imageSlideshow.setImageInputs([ImageSource(image: image!)])
         }
         
-        nameLabel.text = "Name: \(place.name)"
-        descriptionLabel.text = "Description: \(place.description ?? noDataInfo)"
-        addressLabel.text = "Address: \(place.location.address ?? noDataInfo)"
-        localityLabel.text = "Locality: \(place.location.locality ?? noDataInfo)"
-        categoriesLabel.text = "Categories: \(place.categories.map { $0.name }.joined(separator: ", "))"
-        ratingLabel.text = "Rating: \(place.rating != nil ? String(place.rating!) : noDataInfo)"
+        let categoriesString = place.categories.map { $0.name }.joined(separator: ", ")
+        let ratingString = place.rating != nil ? String(place.rating!) : nil
+        
+        nameLabel.text = place.name
+        descriptionLabel.setupOrHide(prefix: nil, suffix: place.description)
+        addressLabel.setupOrHide(prefix: "Address:", suffix: place.location.address)
+        localityLabel.setupOrHide(prefix: "Locality:", suffix: place.location.locality)
+        categoriesLabel.setupOrHide(prefix: "Categories:", suffix: categoriesString)
+        ratingLabel.setupOrHide(prefix: "Rating:", suffix: ratingString)
     }
-    
     
 }
